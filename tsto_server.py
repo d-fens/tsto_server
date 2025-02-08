@@ -742,8 +742,12 @@ class TheSimpsonsTappedOutLocalServer:
                             view_func = self.validate_device_id)
     self.app.add_url_rule("/user/api/android/getDeviceID",
                             view_func = self.get_device_id)
+    self.app.add_url_rule("/user/api/iphone/getDeviceID",
+                          view_func=self.get_idevice_id)
     self.app.add_url_rule("/user/api/android/getAnonUid",
                             view_func = self.get_anon_uid)
+    self.app.add_url_rule("/user/api/iphone/getAnonUid",
+                          view_func=self.get_ianon_uid)
 
     # server: gateway.ea.com
     self.app.add_url_rule("/proxy/identity/pids/me/personas/<string:user_id>",
@@ -1026,6 +1030,47 @@ class TheSimpsonsTappedOutLocalServer:
       }
     )
 
+  def get_ianon_uid(self):
+    """Handler for user.sn.eamobile.com/user/api/iphone/getAnonUid"""
+    if self.debug:
+      print(f"localization: {request.args.get('localization')}")
+      print(f"appVer: {request.args.get('appVer')}")
+      print(f"deviceLanguage: {request.args.get('deviceLanguage')}")
+      print(f"appLang: {request.args.get('appLang')}")
+      print(f"apiVer: {request.args.get('apiVer')}")
+      print(f"hwId: {request.args.get('hwId')}")
+      print(f"deviceLocale: {request.args.get('deviceLocale')}")
+      print(f"eadeviceid: {request.args.get('eadeviceid')}")
+      print(f"updatePriority: {request.args.get('updatePriority')}")
+
+    return jsonify(
+      {
+        "resultCode": 0,
+        "serverApiVersion": "1.0.0",
+        "uid": random.randint(10000000000, 99999999999)     # 17987306517
+      }
+    )
+      
+  def get_idevice_id(self):
+    """Handler for user.sn.eamobile.com/user/api/iphone/getDeviceID"""
+    if self.debug:
+      print(f"localization: {request.args.get('localization')}")
+      print(f"appVer: {request.args.get('appVer')}")
+      print(f"deviceLanguage: {request.args.get('deviceLanguage')}")
+      print(f"appLang: {request.args.get('appLang')}")
+      print(f"apiVer: {request.args.get('apiVer')}")
+      print(f"hwId: {request.args.get('hwId')}")
+      print(f"deviceLocale: {request.args.get('deviceLocale')}")
+      print(f"androidId: {request.args.get('androidId')}")
+
+    return jsonify(
+      {
+        "deviceId": self.device_id,
+        "resultCode": 0,
+        "serverApiVersion": "1.0.0"
+      }
+    )
+    
   def validate_device_id(self):
     """Handler for user.sn.eamobile.com/user/api/android/validateDeviceID"""
     self.print_headers()
